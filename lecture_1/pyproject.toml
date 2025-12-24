@@ -1,0 +1,35 @@
+[project]
+name = "lecture_1"
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = [
+    "jupyter==1.1.0",
+]
+
+[tool.ruff]
+line-length = 79
+
+[tool.ruff.lint]
+extend-select = [
+    "B",
+    "C4",
+    "D",
+    "I",
+    "E501",
+    "N801",
+    "N804",
+    "N805",
+    "Q",
+    "UP",
+]
+
+ignore = [
+    "D415",
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["D104"]
+

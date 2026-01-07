@@ -1,6 +1,11 @@
 # 2026-AI-Development
 Winter 2026 AI Development Training Series
 
+This course was developed in partnership between the University of Chicago's [Career Advancement Office](https://careeradvancement.uchicago.edu/) and the University of Chicago's [Data Science Institute](https://datascience.uchicago.edu/).
+
+**The work below is incomplete -- the final course will be coming soon!**
+
+
 ## Workshop: AI Development (4-part series)
 
 This repository contains materials for a four-part workshop on AI development for advanced undergraduates (3rd/4th year).

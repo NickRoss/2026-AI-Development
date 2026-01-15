@@ -26,6 +26,99 @@
   \tableofcontents
 \end{frame}
 
+\section{Readings}
+
+\begin{frame}{Readings Overview}
+\textbf{Before next class, please read:}
+\vspace{0.3cm}
+
+\begin{enumerate}
+    \item \textbf{Context Engineering} - Understanding how to design effective prompts and context
+    \item \textbf{Gary Marcus on AI Limitations} - Critical analysis of what AI can and cannot do
+    \item \textbf{Gas Town} - Broader perspective on AI development (optional, but interesting!)
+\end{enumerate}
+\end{frame}
+
+
+\begin{frame}{Context Engineering}
+\textbf{Reading 1: Effective Context Engineering for AI Agents}
+\begin{itemize}
+    \item \textbf{Source}: Anthropic
+    \item Some design information and breakdown of what goes into context
+\end{itemize}
+\vspace{0.2cm}
+
+\textbf{Reading 2: Context Engineering}
+\begin{itemize}
+    \item \textbf{Source}: Simon Willison
+    \item Great blog on what is happening in AI and developmen
+\end{itemize}
+\vspace{0.2cm}
+
+\textbf{Reading 3: Agent Best Practices}
+\begin{itemize}
+    \item \textbf{Source}: Cursor
+    \item Similar to Anthropic Article
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Gas Town}
+\textbf{Welcome to Gas Town} by Steve Yegge
+\vspace{0.3cm}
+
+\begin{itemize}
+    \item \textbf{Length}: LONG essay
+    \item Below are the stages of using AI for coding and development. Which are you?!?
+\end{itemize}
+
+\vspace{0.2cm}
+{\small
+\begin{tabular}{p{0.2\textwidth} p{0.7\textwidth}}
+\textbf{Stage 1} & Zero or Near-Zero AI: maybe code completions, sometimes ask Chat questions \\[0.15cm]
+\textbf{Stage 2} & Coding agent in IDE, permissions turned on. A narrow coding agent in a sidebar asks your permission to run tools. \\[0.15cm]
+\textbf{Stage 3} & Agent in IDE, YOLO mode: Trust goes up. You turn off permissions, agent gets wider. \\[0.15cm]
+\textbf{Stage 4} & In IDE, wide agent: Your agent gradually grows to fill the screen. Code is just for diffs.
+\end{tabular}
+}
+
+\end{frame}
+
+\begin{frame}{Gas Town (continued)}
+
+{\small
+\begin{tabular}{p{0.2\textwidth} p{0.7\textwidth}}
+\textbf{Stage 5} & CLI, single agent. YOLO. Diffs scroll by. You may or may not look at them. \\[0.15cm]
+\textbf{Stage 6} & CLI, multi-agent, YOLO. You regularly use 3 to 5 parallel instances. You are very fast. \\[0.15cm]
+\textbf{Stage 7} & 10+ agents, hand-managed. You are starting to push the limits of hand-management. \\[0.15cm]
+\textbf{Stage 8} & Building your own orchestrator. You are on the frontier, automating your workflow.
+\end{tabular}
+}
+
+\end{frame}
+
+\begin{frame}{Gary Marcus on AI}
+
+\vspace{0.2cm}
+
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\textbf{Reading 4:} \textit{Why ChatGPT Can't Be Trusted With}
+\vspace{0.3cm}
+
+\includegraphics[width=\textwidth]{images/GaryMarcusNews.png}
+\end{column}
+
+\begin{column}{0.48\textwidth}
+\textbf{Reading 5:} \textit{Let's Be Honest: Generative AI Isn't}
+\vspace{0.3cm}
+
+\includegraphics[width=\textwidth]{images/GaryMarcusAI.png}
+\end{column}
+\end{columns}
+\end{frame}
+
+
+
 
 \section{Development Methodology}
 
@@ -323,6 +416,7 @@ We want to start with a \textbf{vertical slice}.
 \end{enumerate}
 \end{frame}
 
+
 \section{AI Resume Scoring System}
 
 \begin{frame}{Problem Background}
@@ -330,7 +424,7 @@ We want to start with a \textbf{vertical slice}.
   \item We have been hired by a company to help with their software developer hiring process
   \item Our goal is to build an AI-assisted resume scoring system
   \item For each resume, we want to score it so that we don't waste time on resumes we are unlikely to hire
-  \item We are also cost conscious.
+  \item We are also cost-conscious.
   \item Scores should be on a 0-100 scale.
 \end{itemize}
 \end{frame}
@@ -350,10 +444,10 @@ We want to start with a \textbf{vertical slice}.
 	\item \textbf{Data}: \texttt{resumes\_final.csv} has one row per resume (anonymized, taken from Kaggle)
 	\item \textbf{Functions}: Our notebook has two functions already:
 	\begin{enumerate}
-		\item \texttt{load\_resumes()} - loads all the resumes into a dictionary
+		\item \texttt{load\_resumes()} - loads all resumes into a dictionary
 		\item \texttt{analyze\_resume()} - runs a prompt against a resume with structured output
 	\end{enumerate}
-	\item There are two job reqs in the directory also: \texttt{job\_req\_senior.md} and \texttt{job\_req\_junior.md}
+	\item There are also two job reqs in the directory: \texttt{job\_req\_senior.md} and \texttt{job\_req\_junior.md}
 	\item Start with \textbf{Senior}
 \end{itemize}
 \end{frame}
@@ -380,12 +474,12 @@ We want to start with a \textbf{vertical slice}.
 \begin{frame}{Resume Screening System: Crawl, Walk, Run}
 \textbf{Phase 1: Vertical Slice (Crawl)}
 \begin{itemize}
-\item Generate Score for a Single Resume for a single Job Req
+\item Generate score for a single resume for a single job req
 \end{itemize}
 \vspace{0.3cm}
 \textbf{Phase 2: Horizontal Expansion (Walk)}
 \begin{itemize}
-\item Generate Score for \textbf{most} resumes for a single Job Req
+\item Generate score for \textbf{most} resumes for a single job req
 \end{itemize}
 \vspace{0.3cm}
 \textbf{Phase 3: Production (Run)}

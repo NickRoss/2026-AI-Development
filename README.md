@@ -27,13 +27,24 @@ This repository contains materials for a four-part workshop on AI development fo
     - [Let's Be Honest: Generative AI Isn't](https://garymarcus.substack.com/p/lets-be-honest-generative-ai-isnt) - Perspective on what generative AI can and cannot do reliably.
   
 
+### Lecture 2 (Costs and Processing)
+- **Topic**: Vertical Slices, MVPs, Crawling, Walking, and Running
+- **Slides**: `lecture_2/slides/lecture_2.pdf`
+- **Notebook**: `lecture_2/notebooks/resume_screening.ipynb`
+- **Data**: `lecture_2/data/resumes_final.csv` (130 resumes for AI-assisted scoring)
+
+- **Readings for lecture 3**:
+  - **Vertical vs. Horizontal Slices**
+    - [Comparing Approaches: Horizontal Slice vs Vertical Slice Programming](https://victormagalhaes-dev.medium.com/comparing-approaches-horizontal-slice-vs-vertical-slice-programming-d8db017952e4) - Understanding different development approaches.
+
+  - **Right-Sized Unit of Work**
+    - [AI Unit of Work](https://blog.nilenso.com/blog/2025/09/15/ai-unit-of-work/) - How to scope work appropriately for AI systems.
+
+  - **AI Limitations and Best Practices**
+    - [AI Blindspots](https://ezyang.github.io/ai-blindspots/) - Understanding where AI agents fail and how to design around it.
+    - [Scaling Agents](https://cursor.com/blog/scaling-agents) - Cursor's insights on building production-grade AI agents.
+
 ## Under Construction below!
-
-
-### Lecture 2 (HITL + evaluation)
-- **Problem**: Marketing automation / outreach drafting with compliance
-- **Notebook**: `lecture_2/notebooks/lecture_2_marketing_hitl.ipynb`
-- **Data/docs**: `lecture_2/data/` (leads + brand + product one-pager + rubric)
 
 ### Lecture 3 (grounding + API actions)
 - **Problem**: Support ticket triage with grounded replies and safe external actions

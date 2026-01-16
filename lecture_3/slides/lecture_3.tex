@@ -11,6 +11,86 @@
 
 \frame{\titlepage}
 
+\section{AI Agents}
+
+\begin{frame}{What is an AI Agent?}
+\begin{itemize}
+    \item An \textbf{AI Agent} is an LLM that can use \textbf{tools} to interact with the outside world
+    \item While a basic LLM can only generate text based on its training data, an agent can:
+    \begin{itemize}
+        \item Query databases
+        \item Call APIs
+        \item Read files
+        \item Execute code
+        \item Search the web
+        \item Perform actions in real-time
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{LLM vs Agent: Key Differences}
+\begin{table}
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Aspect} & \textbf{LLM} & \textbf{Agent} \\
+\hline
+Capabilities & Text generation only & Text + tool usage \\
+\hline
+Knowledge & Training data only & Training data + real-time data \\
+\hline
+Actions & None & Can perform actions via tools \\
+\hline
+Interactivity & One-shot responses & Can loop and iterate \\
+\hline
+\end{tabular}
+\end{table}
+\end{frame}
+
+\begin{frame}{Common Tool Categories}
+\begin{itemize}
+    \item \textbf{Database Tools}: Query databases, insert/update/delete records
+    \item \textbf{API Tools}: Call REST APIs, interact with web services
+    \item \textbf{File System Tools}: Read/write files, list directories
+    \item \textbf{Code Execution Tools}: Run Python code, execute shell commands
+    \item \textbf{Web Tools}: Search the web, scrape websites
+\end{itemize}
+\end{frame}
+
+\begin{frame}{The Agent Loop}
+\begin{center}
+\Large
+Observe $\rightarrow$ Think $\rightarrow$ Act $\rightarrow$ Observe $\rightarrow$ \ldots
+\end{center}
+\vspace{1cm}
+\begin{enumerate}
+    \item \textbf{Observe}: Receive input (user query, tool results, system state)
+    \item \textbf{Think}: Process information and decide what to do next
+    \item \textbf{Act}: Execute actions (call tools, generate responses)
+    \item \textbf{Observe}: See the results and continue the loop
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Example Agent Systems}
+\begin{itemize}
+    \item \textbf{LangChain Agents}
+    \begin{itemize}
+        \item Framework for building LLM applications
+        \item Supports multiple LLM providers
+        \item Tool integration and agent orchestration
+    \end{itemize}
+    \item \textbf{Claude with MCP} (Model Context Protocol)
+    \begin{itemize}
+        \item Claude Desktop can connect to MCP servers
+        \item Access custom tools and data sources
+    \end{itemize}
+    \item \textbf{ChatGPT with Plugins/Code Interpreter}
+    \item \textbf{Cursor AI}
+\end{itemize}
+\end{frame}
+
+\section{Lecture 3: Support Triage + API Actions}
+
 \begin{frame}{What you will build today}
 \begin{itemize}
   \item A ticket triage pipeline (priority, category, route) using structured output

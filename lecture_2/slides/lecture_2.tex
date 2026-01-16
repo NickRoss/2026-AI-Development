@@ -1,9 +1,19 @@
 \documentclass[aspectratio=169]{beamer}
 \usetheme{Madrid}
 \usecolortheme{default}
+\usepackage{tikz}
+\usetikzlibrary{calc,shapes,arrows.meta,positioning}
 
-\title{Lecture 2: Marketing Automation with HITL}
-\subtitle{Structured outputs, evaluation loops, and human review}
+% --- Organization slides (TOC + section dividers) ---
+\AtBeginSection[]
+{
+  \begin{frame}{Outline}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
+\title{Lecture 2: Costs and Processing}
+\subtitle{Vertical Slices, MVPs, Crawling, Walking, and Running}
 \author{University of Chicago}
 \date{\today}
 
@@ -11,117 +21,516 @@
 
 \frame{\titlepage}
 
-\begin{frame}{What you will build today}
-\begin{itemize}
-  \item A reproducible workflow that turns lead data into outreach drafts
-  \item A quality-control (QC) step that flags risky/low-quality outputs
-  \item A simple human-in-the-loop (HITL) review queue for approvals/edits
-  \item A tiny evaluation harness to compare prompt versions
-\end{itemize}
+% Global outline (matches \section{} titles)
+\begin{frame}{Outline}
+  \tableofcontents
 \end{frame}
 
-\begin{frame}{Business problem}
-\textbf{Scenario}: You're on a growth team. You have many inbound leads and limited human time.
-\vspace{0.4cm}
+\section{Readings}
 
-\textbf{Goal}: Generate compliant, personalized outreach at scale while minimizing:
-\begin{itemize}
-  \item hallucinated claims
-  \item policy / compliance violations
-  \item off-brand tone
-  \item missing personalization
-\end{itemize}
-\end{frame}
+\begin{frame}{Readings Overview}
+\textbf{Before next class, please read:}
+\vspace{0.3cm}
 
-\begin{frame}{Inputs (provided in \texttt{lecture\_2/data})}
-\begin{itemize}
-  \item \texttt{leads.csv}: lead attributes and notes
-  \item \texttt{product\_one\_pager.md}: facts you are allowed to use
-  \item \texttt{brand\_guidelines.md}: tone and style constraints
-  \item \texttt{rubric.md}: what counts as a ``good'' draft
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Workflow (high-level)}
 \begin{enumerate}
-  \item \textbf{Summarize} lead notes $\rightarrow$ JSON
-  \item \textbf{Draft} email + subject $\rightarrow$ JSON
-  \item \textbf{QC} pass: check claims, tone, constraints $\rightarrow$ risk score + reasons
-  \item \textbf{HITL} queue: approve / edit / reject
-  \item \textbf{Evaluate}: measure pass-rate across a small set
+    \item \textbf{Context Engineering} - Understanding how to design effective prompts and context
+    \item \textbf{Gary Marcus on AI Limitations} - Critical analysis of what AI can and cannot do
+    \item \textbf{Gas Town} - Broader perspective on AI development (optional, but interesting!)
 \end{enumerate}
 \end{frame}
 
-\begin{frame}{New workflow primitive introduced}
+
+\begin{frame}{Context Engineering}
+\textbf{Reading 1: Effective Context Engineering for AI Agents}
 \begin{itemize}
-  \item \textbf{Human-in-the-loop review}: you do not ship raw model output to customers
-  \item \textbf{Evaluation harness}: treat prompt edits like code changes (measure impact)
+    \item \textbf{Source}: Anthropic
+    \item Some design information and breakdown of what goes into context
+\end{itemize}
+\vspace{0.2cm}
+
+\textbf{Reading 2: Context Engineering}
+\begin{itemize}
+    \item \textbf{Source}: Simon Willison
+    \item Great blog on what is happening in AI and developmen
+\end{itemize}
+\vspace{0.2cm}
+
+\textbf{Reading 3: Agent Best Practices}
+\begin{itemize}
+    \item \textbf{Source}: Cursor
+    \item Similar to Anthropic Article
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Structured output schemas (examples)}
-\textbf{Lead summary schema}
+\begin{frame}{Gas Town}
+\textbf{Welcome to Gas Town} by Steve Yegge
+\vspace{0.3cm}
+
 \begin{itemize}
-  \item \texttt{lead\_summary} (string)
-  \item \texttt{pain\_points} (list[string])
-  \item \texttt{suggested\_angle} (string)
-  \item \texttt{missing\_info} (list[string])
+    \item \textbf{Length}: LONG essay
+    \item Below are the stages of using AI for coding and development. Which are you?!?
+\end{itemize}
+
+\vspace{0.2cm}
+{\small
+\begin{tabular}{p{0.2\textwidth} p{0.7\textwidth}}
+\textbf{Stage 1} & Zero or Near-Zero AI: maybe code completions, sometimes ask Chat questions \\[0.15cm]
+\textbf{Stage 2} & Coding agent in IDE, permissions turned on. A narrow coding agent in a sidebar asks your permission to run tools. \\[0.15cm]
+\textbf{Stage 3} & Agent in IDE, YOLO mode: Trust goes up. You turn off permissions, agent gets wider. \\[0.15cm]
+\textbf{Stage 4} & In IDE, wide agent: Your agent gradually grows to fill the screen. Code is just for diffs.
+\end{tabular}
+}
+
+\end{frame}
+
+\begin{frame}{Gas Town (continued)}
+
+{\small
+\begin{tabular}{p{0.2\textwidth} p{0.7\textwidth}}
+\textbf{Stage 5} & CLI, single agent. YOLO. Diffs scroll by. You may or may not look at them. \\[0.15cm]
+\textbf{Stage 6} & CLI, multi-agent, YOLO. You regularly use 3 to 5 parallel instances. You are very fast. \\[0.15cm]
+\textbf{Stage 7} & 10+ agents, hand-managed. You are starting to push the limits of hand-management. \\[0.15cm]
+\textbf{Stage 8} & Building your own orchestrator. You are on the frontier, automating your workflow.
+\end{tabular}
+}
+
+\end{frame}
+
+\begin{frame}{Gary Marcus on AI}
+
+\vspace{0.2cm}
+
+\begin{columns}[T]
+\begin{column}{0.48\textwidth}
+\textbf{Reading 4:} \textit{Why ChatGPT Can't Be Trusted With}
+\vspace{0.3cm}
+
+\includegraphics[width=\textwidth]{images/GaryMarcusNews.png}
+\end{column}
+
+\begin{column}{0.48\textwidth}
+\textbf{Reading 5:} \textit{Let's Be Honest: Generative AI Isn't}
+\vspace{0.3cm}
+
+\includegraphics[width=\textwidth]{images/GaryMarcusAI.png}
+\end{column}
+\end{columns}
+\end{frame}
+
+
+
+
+\section{Development Methodology}
+
+\begin{frame}{System Thinking: Breaking Down AI Tasks}
+\begin{itemize}
+    \item Before coding, we need to \textbf{think systematically}:
+    \begin{enumerate}
+        \item How do we abstract and organize our code?
+        \item How do we break tasks into inputs and outputs?
+        \item How do we organize these into functions?
+    \end{enumerate}
+    \item \textbf{Plan before you code}
+    \item Break down required tasks, \textit{then} start coding
+    \item How do we do this? What does it mean to ``break tasks down"?
+\end{itemize}
+\end{frame}
+
+\begin{frame}{The Development Process}
+\textbf{Three-Step Approach:}
+\begin{enumerate}
+    \item \textbf{Define a vertical slice}
+    \begin{itemize}
+        \item What is the minimal end-to-end flow?
+        \item Start simple, prove it works
+    \end{itemize}
+    \vspace{0.2cm}
+    \item \textbf{Define the systems (functions) required}
+    \begin{itemize}
+        \item Know the inputs and outputs of each piece
+        \item Simpler is better
+    \end{itemize}
+    \vspace{0.2cm}
+    \item \textbf{Then: Crawl $\rightarrow$ Walk $\rightarrow$ Run}
+    \begin{itemize}
+        \item Start minimal, add features incrementally
+    \end{itemize}
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Example Problem: Time Series Analysis}
+\textbf{Task}: Run a regression on 25 datasets
+\vspace{0.3cm}
+
+\textbf{Context}:
+\begin{itemize}
+    \item We have data from 25 countries
+    \item Each CSV contains education and GDP data over time
+    \item We want to run a time series analysis on the relationship
 \end{itemize}
 \vspace{0.3cm}
-\textbf{Draft schema}
+
+\textbf{Question}: How do we break this down?
+\end{frame}
+
+\begin{frame}{System Design: Complete Problem}
+\begin{center}
+\begin{tikzpicture}[
+  box/.style={rectangle, draw, thick, minimum width=3cm, minimum height=1cm, text centered},
+  arrow/.style={->, thick, >=Stealth}
+]
+  \node[box] (load) at (0,0) {Load 25 Datasets};
+  \node[box] (clean) at (0,-1.5) {Clean 25 Datasets};
+  \node[box] (regress) at (0,-3) {Run Regressions};
+  \node[box] (present) at (0,-4.5) {Present Results Table};
+
+  \draw[arrow] (load) -- (clean);
+  \draw[arrow] (clean) -- (regress);
+  \draw[arrow] (regress) -- (present);
+\end{tikzpicture}
+\end{center}
+\vspace{0.2cm}
+This is the \textbf{complete problem}, but where do we start?
+\end{frame}
+
+\begin{frame}{Inputs and Outputs: The Missing Piece}
+\textbf{For each system component, we need to define:}
 \begin{itemize}
-  \item \texttt{subject} (string)
-  \item \texttt{email\_body} (string)
-  \item \texttt{personalization\_tokens} (list[string])
+    \item \textbf{Load Data}: What format for each column? How to handle dates? Any transformations?
+    \item \textbf{Clean Data}: What cleaning steps? How do we handle missing values?
+    \item \textbf{Run Regression}: What type? Linear? Time series?
+    \item \textbf{Present Output}: Table? Graph? JSON? What metrics?
+\end{itemize}
+\vspace{0.3cm}
+\pause
+\textbf{This is the complete problem, but we never want to start here!}
+\vspace{0.2cm}
+
+We want to start with a \textbf{vertical slice}.
+\end{frame}
+
+\begin{frame}{What is a Vertical Slice?}
+\textbf{A vertical slice}:
+\begin{itemize}
+    \item Contains \textbf{everything} needed to go from top to bottom
+    \item Works on a \textbf{subset} of inputs
+    \item Proves the \textbf{end-to-end flow} works
+    \item Is the \textbf{simplest possible} complete solution
+\end{itemize}
+\vspace{0.3cm}
+
+\textbf{When we build AI systems, we want to start with vertical slices.}
+\end{frame}
+
+\begin{frame}{Why Vertical Slices for AI?}
+\textbf{AI systems have unique challenges:}
+\begin{itemize}
+    \item \textbf{Complex}: Many moving parts and dependencies
+    \item \textbf{Uncertain failure points}: We aren't sure where things will break
+    \item \textbf{Non-deterministic}: Errors appear in unexpected places
+    \item \textbf{Iterative prompting}: Prompts need testing and refinement
+\end{itemize}
+\vspace{0.3cm}
+
+\textbf{With vertical slices}:
+\begin{itemize}
+    \item We build a viable end-to-end solution that works on a \textbf{subset} of inputs
+    \item We discover integration issues \textbf{early}
+    \item We can demonstrate \textbf{value quickly}
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Exercises}
+\begin{frame}{The Opposite: Horizontal Development}
+\textbf{Horizontal development} means:
 \begin{itemize}
-  \item Baseline prompt $\rightarrow$ get working JSON output
-  \item Improve personalization while keeping compliance constraints
-  \item Add QC checks: hallucination/claims, tone, forbidden phrases
-  \item Implement a HITL review loop in the notebook
-  \item Run the mini-eval and compare prompt versions
+    \item Building for \textbf{all contingencies} at each level
+    \item Handling \textbf{every possibility} before moving forward
+    \item Creating \textbf{complete infrastructure} before testing end-to-end
+\end{itemize}
+\vspace{0.3cm}
+
+\textbf{For our regression example}:
+\begin{itemize}
+    \item Load all 25 datasets with full error handling
+    \item Clean all datasets with every edge case covered
+    \item Build multiple regression types and robustness checks
+    \item Create multiple output formats and visualizations
+\end{itemize}
+\vspace{0.3cm}
+
+\textbf{Problem}: You spend weeks building infrastructure before knowing if the core idea works!
+\end{frame}
+
+\begin{frame}{Vertical Slice: Regression Example}
+\begin{center}
+\begin{tikzpicture}[
+  box/.style={rectangle, draw, thick, minimum width=4.5cm, minimum height=1cm, text centered, align=center},
+  arrow/.style={->, thick, >=Stealth}
+]
+  \node[box, fill=blue!20] (load) at (0,0) {Load 1 Dataset \\ {\small (1 country only)}};
+  \node[box, fill=blue!20] (clean) at (0,-1.5) {Clean 1 Dataset \\ {\small (drop broken years)}};
+  \node[box, fill=blue!20] (regress) at (0,-3) {Run 1 Regression \\ {\small (no robustness checks)}};
+  \node[box, fill=blue!20] (present) at (0,-4.5) {Present $R^2$ Only \\ {\small (simplest output)}};
+
+  \draw[arrow] (load) -- (clean);
+  \draw[arrow] (clean) -- (regress);
+  \draw[arrow] (regress) -- (present);
+\end{tikzpicture}
+\end{center}
+\vspace{0.2cm}
+\textbf{This proves it works end-to-end with minimal effort!}
+\end{frame}
+
+\begin{frame}{Example: Personalized Marketing Emails}
+\textbf{Task}: Send AI-generated personalized marketing emails to leads
+\vspace{0.3cm}
+
+\textbf{Vertical Slice Approach}:
+\begin{itemize}
+    \item Load \textbf{one} lead from the database
+    \item Generate \textbf{one} email with LLM
+    \item Print email to console for manual review
+    \item If it looks good, move to next step
+\end{itemize}
+\vspace{0.3cm}
+
+\textbf{Horizontal Approach} (what NOT to do):
+\begin{itemize}
+    \item Build complete database integration for all leads
+    \item Create email templates for all scenarios
+    \item Build full SMTP sending infrastructure
+    \item Set up monitoring and analytics before sending anything
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Deliverable}
+\begin{frame}{Principle: Well-Defined Inputs and Outputs}
 \begin{itemize}
-  \item \texttt{notebooks/lecture\_2\_marketing\_hitl.ipynb}
-  \item Output files in \texttt{data/outputs/}:
+    \item Each component should have:
+    \begin{enumerate}
+        \item \textbf{Clear input contract}: What data does it expect? In what format?
+        \item \textbf{Clear output contract}: What data does it return? In what format?
+        \item \textbf{Single responsibility}: Does one thing well
+    \end{enumerate}
+    \vspace{0.3cm}
+    \item \textbf{Benefits:}
     \begin{itemize}
-      \item \texttt{drafts.csv} (final approved drafts)
-      \item \texttt{qc\_report.csv} (scores + reasons)
+        \item Easy to understand what each piece does
+        \item Easy to test each piece independently
+        \item Easy to replace or improve individual pieces
+        \item Clear error boundaries
     \end{itemize}
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Extensions / Optional challenges}
+\begin{frame}{Methodology: Crawl, Walk, Run}
 \begin{itemize}
-  \item \textbf{Rubric-based grader}: have the model score drafts using \texttt{rubric.md}; compare to human scores
-  \item \textbf{Batching + cost controls}: cache summaries; estimate tokens/cost; compare one-pass vs two-pass QC
-  \item \textbf{Policy-driven compliance}: map \texttt{compliance\_tags} to explicit deny/allow rules and required disclaimers
-  \item \textbf{Prompt/version tracking}: log prompts + model + params alongside outputs for reproducibility
-  \item \textbf{Multi-variant testing}: A/B prompt variants; select winners by eval metrics
+    \item \textbf{Crawl}: What is the minimum code to verify it's possible?
+    \begin{itemize}
+        \item Hardcoded examples
+        \item Manual verification
+        \item Proof of concept that it can work in \textit{some} instances
+    \end{itemize}
+    \item \textbf{Walk}: What is the minimum code to verify it works in most cases?
+    \begin{itemize}
+        \item Handle common edge cases
+        \item Basic error handling
+        \item Works reliably for typical inputs
+    \end{itemize}
+    \item \textbf{Run}: What does the full production system look like?
+    \begin{itemize}
+        \item Comprehensive error handling
+        \item Monitoring and logging
+        \item Scale and performance optimization
+    \end{itemize}
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Discussion}
+\begin{frame}{Crawl Phase in Detail}
+\textbf{Goal}: Prove the concept works at all
+\vspace{0.3cm}
+
+\textbf{Characteristics}:
 \begin{itemize}
-  \item Where did the model fail? (missing facts vs wrong facts vs style)
-  \item What did structured output enable?
-  \item What checks should be automated vs left to humans?
-  \item How do cost and latency constrain the pipeline?
+    \item Use \textbf{hardcoded} or sample data
+    \item \textbf{No error handling} (let it fail if something breaks)
+    \item \textbf{Manual testing} (print statements, visual inspection)
+    \item \textbf{Happy path only} (assume everything works)
+\end{itemize}
+\vspace{0.3cm}
+
+\textbf{Example - Resume Screening}:
+\begin{itemize}
+    \item Hardcode path to one resume PDF
+    \item Extract skills with LLM, print to console
+    \item Compare to hardcoded job requirements
+    \item Print match score
+\end{itemize}
+\vspace{0.2cm}
+\textbf{If this doesn't work, nothing else matters!}
+\end{frame}
+
+\begin{frame}{Building Vertical Slices First}
+\begin{itemize}
+    \item \textbf{Vertical Slice}: End-to-end functionality for a narrow use case
+    \begin{itemize}
+        \item Example: Process ONE resume through the entire pipeline
+        \item Proves the concept works end-to-end
+        \item Surfaces integration issues early
+    \end{itemize}
+    \vspace{0.3cm}
+    \item \textbf{Then Build Horizontally}: Expand capabilities
+    \begin{itemize}
+        \item Add batch processing
+        \item Add error handling
+        \item Add more sophisticated matching
+        \item Add caching and optimization
+    \end{itemize}
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Next time}
+\begin{frame}{Key Takeaways: Building with AI}
+\begin{enumerate}
+\item \textbf{Define the vertical slice} -- what is the minimum thing you can get working?
+    \begin{itemize}
+        \item Prove end-to-end flow works with simplest case
+        \item Identify integration issues early
+    \end{itemize}
+
+\item \textbf{Figure out the inputs and outputs}
+    \begin{itemize}
+        \item Each function needs clear contracts
+        \item Simpler is better
+    \end{itemize}
+
+\item \textbf{Figure out the pricing}
+    \begin{itemize}
+        \item Know your costs before scaling
+    \end{itemize}
+
+\item \textbf{Expand horizontally after vertical slice works}
+    \begin{itemize}
+        \item Add batch processing, error handling, features
+        \item Don't optimize or add features prematurely
+    \end{itemize}
+
+\end{enumerate}
+\end{frame}
+
+
+\section{AI Resume Scoring System}
+
+\begin{frame}{Problem Background}
 \begin{itemize}
-  \item Add external actions (APIs) and state management
-  \item Ground responses in a knowledge base
+  \item We have been hired by a company to help with their software developer hiring process
+  \item Our goal is to build an AI-assisted resume scoring system
+  \item For each resume, we want to score it so that we don't waste time on resumes we are unlikely to hire
+  \item We are also cost-conscious.
+  \item Scores should be on a 0-100 scale.
 \end{itemize}
+\end{frame}
+
+\begin{frame}{Brainstorming}
+\begin{itemize}
+\item How are we going to proceed here?
+\item What's our vertical slice?
+\item What are the system components?
+\item What are the inputs and outputs?
+\item How much will our decisions cost?
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Let's Look at Our Inputs}
+\begin{itemize}
+	\item \textbf{Data}: \texttt{resumes\_final.csv} has one row per resume (anonymized, taken from Kaggle)
+	\item \textbf{Functions}: Our notebook has two functions already:
+	\begin{enumerate}
+		\item \texttt{load\_resumes()} - loads all resumes into a dictionary
+		\item \texttt{analyze\_resume()} - runs a prompt against a resume with structured output
+	\end{enumerate}
+	\item There are also two job reqs in the directory: \texttt{job\_req\_senior.md} and \texttt{job\_req\_junior.md}
+	\item Start with \textbf{Senior}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Define our system}
+\begin{itemize}
+\item Do we have a good definition of each component?
+\item Do we know the inputs and outputs and what has to happen inside each system?
+\end{itemize}
+\vspace{0.5cm}
+
+\begin{center}
+\fcolorbox{blue!80}{blue!10}{%
+\begin{minipage}{0.8\textwidth}
+\centering
+\large\textbf{Next Step: Crawling!}
+
+\normalsize Start with the simplest possible version
+\end{minipage}
+}
+\end{center}
+\end{frame}
+
+\begin{frame}{Resume Screening System: Crawl, Walk, Run}
+\textbf{Phase 1: Vertical Slice (Crawl)}
+\begin{itemize}
+\item Generate score for a single resume for a single job req
+\end{itemize}
+\vspace{0.3cm}
+\textbf{Phase 2: Horizontal Expansion (Walk)}
+\begin{itemize}
+\item Generate score for \textbf{most} resumes for a single job req
+\end{itemize}
+\vspace{0.3cm}
+\textbf{Phase 3: Production (Run)}
+\begin{itemize}
+	\item Work on \textbf{all} resumes for \textbf{all} job reqs
+    \item Optimize prompts and costs
+    \item Add caching for repeated skills
+    \item Add human-in-the-loop review
+    \item Monitor accuracy and performance
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Next Steps: Hands-On Practice}
+\begin{columns}[T]
+\begin{column}{0.65\textwidth}
+\textbf{Goal}: Build a working resume scorer
+\vspace{0.2cm}
+
+\textbf{Your Task}:
+\begin{enumerate}
+    \item \textbf{Form teams} (2-3 people)
+    \item \textbf{Open the notebook}: \texttt{resume\_screening.ipynb}
+    \item \textbf{Work through the examples}:
+    \begin{itemize}
+        \item Load resume data
+        \item Use structured outputs to extract information
+        \item Match resumes to job requirements
+    \end{itemize}
+    \item \textbf{Key questions to answer}:
+    \begin{itemize}
+        \item Can we create a score (0-100)?
+        \item How do we do that?
+        \item What prompt and schema do we need?
+        \item How much does it cost per resume?
+    \end{itemize}
+\end{enumerate}
+\end{column}
+
+\begin{column}{0.30\textwidth}
+\vspace{1cm}
+\fcolorbox{orange!80}{orange!10}{%
+\begin{minipage}{\textwidth}
+\centering
+\large\textbf{Focus on the Crawl First!}
+
+\vspace{0.3cm}
+\normalsize Start simple, prove it works
+\end{minipage}
+}
+\end{column}
+\end{columns}
 \end{frame}
 
 \end{document}
-

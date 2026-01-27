@@ -76,7 +76,7 @@
 \begin{frame}{The Core Problem}
 \textbf{Our resume scorer from Lecture 2 had issues:}
 \begin{itemize}
-    \item Scores ranged from 0-100, but were they \textit{good}?
+    \item Scores ranged from 0-100, but were they \textit{accurate}?
     \item Results tended to be bunchy (most scores clustered in narrow ranges)
     \item Difficult to interpret what a "65" meant vs. a "75"
     \item No clear explanation for why a candidate got their score
@@ -85,11 +85,6 @@
 \vspace{0.3cm}
 
 \textbf{How do we make this better?}
-\begin{itemize}
-    \item Break down what we're measuring
-    \item Provide evidence for claims
-    \item Make the scoring process more transparent
-\end{itemize}
 \end{frame}
 
 \begin{frame}{The Core Problem}
@@ -104,7 +99,7 @@
 \end{itemize}
 \end{frame}
 
-\section{Expense Report System}
+\section{Example: Expense Report System}
 
 \begin{frame}{Expense Report Validator}
 \textbf{Task}: Validate employee expense reports for compliance
@@ -160,15 +155,22 @@ Total: \$510.00
     \item \textbf{Date}: Jan 15-17, 2024
     \item \textbf{Location}: San Francisco, CA
     \item \textbf{Amount}: \$510.00
-    \item \textbf{Required fields}: Trip purpose (conference), destination
-    \item \textbf{Compliance}: Pass
+    \item \textbf{Additional Required fields}: 
+	\begin{itemize}
+    \item Conf. Name: "AI Summit 2024"
+    \end{itemize}
+    \item \textbf{Compliance Checks}: 
+	\begin{itemize}
+    \item \$1K Max Registration Fee (Pass)
+    \end{itemize}
+
 \end{itemize}
 }
 \end{column}
 \end{columns}
 \end{frame}
 
-\begin{frame}{Example 2: Meals with Alcohol}
+\begin{frame}{Example 2: Meals}
 \begin{columns}[T]
 \begin{column}{0.48\textwidth}
 \textbf{Receipt}:
@@ -200,9 +202,15 @@ Total: \$107.80
     \item \textbf{Date}: Jan 20, 2024
     \item \textbf{Location}: Boston, MA
     \item \textbf{Amount}: \$107.80
-    \item \textbf{Required fields}: Business purpose, attendees
-    \item \textbf{Compliance}: Fail
-    \item \textbf{Issue}: Contains prohibited alcohol (\$16.00)
+    \item \textbf{Additional Required fields}: 
+	\begin{itemize}
+    \item Business purpose, attendees
+    \end{itemize}
+    \item \textbf{Compliance Checks}: 
+	\begin{itemize}
+    \item Contains prohibited items (alcohol \$16.00)
+    \end{itemize}
+
 \end{itemize}
 }
 \end{column}

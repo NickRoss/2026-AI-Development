@@ -1,6 +1,0 @@
-{"ticket_id":"T1001","customer_id":"C001","customer_tier":"free","product":"SignalSpring","timestamp":"2025-11-18T09:14:00Z","text":"Hi—I'm getting \"invalid API key\" when I try to run the notebook. I copied it into my env but still no luck. Any ideas?"}
-{"ticket_id":"T1002","customer_id":"C014","customer_tier":"pro","product":"SignalSpring","timestamp":"2025-11-18T10:02:00Z","text":"Billing question: I was charged twice this month. Can you refund one of the charges? Invoice IDs: INV-8841 and INV-8841 (same?)"}
-{"ticket_id":"T1003","customer_id":"C077","customer_tier":"enterprise","product":"SignalSpring","timestamp":"2025-11-19T16:40:00Z","text":"Our security team needs to know: do you store prompts and outputs? We may need a DPA. Also, can you disable logging?"}
-{"ticket_id":"T1004","customer_id":"C003","customer_tier":"pro","product":"SignalSpring","timestamp":"2025-11-20T13:07:00Z","text":"Integrations: do you support sending drafts to HubSpot? If not, can we call a webhook from your pipeline?"}
-{"ticket_id":"T1005","customer_id":"C088","customer_tier":"free","product":"SignalSpring","timestamp":"2025-11-21T18:23:00Z","text":"App crashes with 'FileNotFoundError: kb/articles.md' when I run the example. I didn't change anything."}
-

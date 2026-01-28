@@ -1,0 +1,24 @@
+\frametitle{Solution: Provide Examples}
+\textbf{Better prompt}: Show the model what good classification looks like
+\vspace{0.2cm}
+
+\begin{block}{Few-Shot Prompt}
+{\small
+Classify this expense. Here are some examples:
+
+\textbf{Example 1}:
+Receipt: Conference registration, AI Summit 2024, \$500
+Classification: Travel (conferences are travel-related)
+
+\textbf{Example 2}:
+Receipt: Office chair from Staples, \$200
+Classification: Office Supplies (furniture and equipment)
+
+\textbf{Example 3}:
+Receipt: Team dinner at local restaurant, \$120
+Classification: Meals/Entertainment (company-sponsored meals)
+
+Now classify:
+Receipt: [Your receipt here]
+}
+\end{block}

@@ -44,17 +44,50 @@ This repository contains materials for a four-part workshop on AI development fo
     - [AI Blindspots](https://ezyang.github.io/ai-blindspots/) - Understanding where AI agents fail and how to design around it.
     - [Scaling Agents](https://cursor.com/blog/scaling-agents) - Cursor's insights on building production-grade AI agents.
 
-## Under Construction below!
+### Lecture 3 (Improving Performance)
+- **Topic**: Context Engineering Techniques for Better Results
+- **Slides**: `lecture_3/slides/lecture_3.pdf`
+- **Notebook**: `lecture_3/notebooks/lecture_3_resume_scorer_improvement.ipynb`
+- **Data**: `lecture_3/data/resumes_final.csv` (130 resumes), `lecture_3/data/job_req_senior.md`
+- **Key Techniques**: Decomposition, Grounding with Citations, Few-Shot Examples
+- **Teaching Example**: Expense report validator (slides only)
+- **Hands-on**: Apply techniques to improve the resume scorer from Lecture 2
 
-### Lecture 3 (grounding + API actions)
-- **Problem**: Support ticket triage with grounded replies and safe external actions
-- **Notebook**: `lecture_3/notebooks/lecture_3_support_triage_api.ipynb`
-- **Data/docs**: `lecture_3/data/` (tickets + KB + stub API data)
+- **Readings for lecture 4**:
+  - **Agents and Tools**
+    - [Building Effective Agents](https://www.anthropic.com/research/building-effective-agents) - Anthropic's guide to agent patterns and best practices
+    - [AI Agents: A Practical Guide](https://simonwillison.net/2024/Oct/21/practical-ai-agents/) - Simon Willison's overview of agent architectures
 
-### Lecture 4 (tools/MCP-like + orchestrator)
-- **Problem**: Research brief generation using a tool registry and a simple orchestrator loop
-- **Notebook**: `lecture_4/notebooks/lecture_4_tooling_orchestrator.ipynb`
-- **Data/docs**: `lecture_4/data/` (docs + market signals + tool registry)
+  - **Production Considerations**
+    - [Observability for AI Agents](https://www.honeycomb.io/blog/observability-ai-agents) - Monitoring and debugging agent systems
+    - [When Not to Use AI Agents](https://www.anthropic.com/research/when-not-to-use-agents) - Understanding agent limitations and anti-patterns
+
+### Lecture 4 (AI Agents & Tool Use)
+- **Topic**: Building an Application Routing Agent
+- **Slides**: `lecture_4/slides/lecture_4.pdf`
+- **Notebook**: `lecture_4/notebooks/lecture_4_application_routing_agent.ipynb`
+- **Data**: `lecture_4/data/resumes_final.csv` (130 resumes), `lecture_4/data/job_req_senior.md`
+- **Key Concepts**:
+  - Understanding AI agents and the agent loop (Observe → Think → Act)
+  - Tool registries and function calling
+  - Multi-turn decision making with action history
+  - Action logging and observability
+  - The tool ecosystem (MCP, agents.txt, skills/plugins)
+  - Production considerations: safety, reliability, monitoring
+  - Common failure modes (infinite loops, tool hallucination, premature completion)
+  - Ethical considerations (bias, transparency, accountability)
+  - Human-in-the-loop design patterns
+- **Teaching Examples**:
+  - Weather query agent (3-turn example showing context evolution)
+  - Ralph Wiggum plugin (preventing premature completion)
+- **Hands-on**: Build an agent that routes job applications through multiple decision points
+  - Extract candidate features (years, skills, education) using Lecture 3 techniques
+  - Implement 7 tools: schedule assessments, reject applications, flag for review, send emails, etc.
+  - Build the agent decision function and agent loop
+  - Analyze results with pandas DataFrames
+  - **Task 1**: Calculate costs for 3 candidates and estimate for 130
+  - **Task 2**: Experiment with temperature settings (0.2, 0.5, 1.0)
+  - **Task 3**: Run on full dataset of 130 candidates and verify cost estimates
 
 ## Running notebooks (per lecture)
 
@@ -74,3 +107,6 @@ Example:
 cd lecture_1/slides
 pdflatex lecture_1.tex
 ```
+
+## Improvements for next time
+

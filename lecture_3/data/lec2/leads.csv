@@ -1,8 +1,0 @@
-lead_id,name,role,company,industry,company_size,region,last_touch,notes,compliance_tags
-L001,Ana Rivera,VP Finance,Northwind Foods,CPG,500-1000,US Midwest,2025-11-03,"Evaluating tools to reduce month-end close time. Current pain: manual reconciliations, delayed reporting. Mentioned interest in audit readiness.",no_financial_advice;no_guarantees
-L002,Marcus Chen,Head of RevOps,Contoso Cloud,SaaS,200-500,US West,2025-11-15,"Team is scaling outbound; wants better lead scoring + personalization. Concerned about brand consistency and compliance review.",no_unverified_claims
-L003,Sara Patel,Marketing Manager,Fabrikam Retail,Retail,1000-5000,US Northeast,2025-10-27,"Asked for examples of lifecycle campaigns. Wants faster content creation but worried about hallucinations and \"sounding robotic\".",no_unverified_claims
-L004,Diego Alvarez,Director of IT,Blue Yonder Logistics,Logistics,500-1000,US South,2025-11-20,"Interested in automation but security-conscious. Asked about data retention and whether prompts are stored.",no_sensitive_data
-L005,Leah Johnson,Founder,GreenSprout Health,Healthcare,10-50,US Midwest,2025-11-08,"Wants patient-friendly comms templates. Needs strong disclaimers; no medical advice. Prefers warm, simple language.",no_medical_advice;no_guarantees
-L006,Noah Kim,Product Lead,AdventureWorks,Manufacturing,200-500,Canada,2025-11-29,"Exploring internal assistant for SOP lookup. Needs citations and traceability. Asked about cost predictability.",no_unverified_claims
-

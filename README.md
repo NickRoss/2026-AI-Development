@@ -14,6 +14,8 @@ This repository contains materials for a four-part workshop on AI development fo
 
 
 - **Readings for lecture 2**:
+  - **AI Coding**
+    - [A survey of AI Coding](https://paulgp.com/ai-coding/2025/12/02/ai-coding.html)
   - **Context Engineering** 
     - [Effective Context Engineering for AI Agents](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) - Anthropic's guide to designing context windows for reliable agent behavior.
     - [Context Engineering](https://simonwillison.net/2025/Jun/27/context-engineering/) - Simon Willison's take.
